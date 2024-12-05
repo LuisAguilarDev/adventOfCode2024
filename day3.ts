@@ -1,6 +1,6 @@
 import fs from 'fs';
 //First
-fs.readFile('./files/day3.txt', 'utf8', (err: any, content: string) => {
+fs.readFile('./data/day3.txt', 'utf8', (err: any, content: string) => {
   if (err) return;
   const regex = /mul\(\d+,\d+\)/g;
   const operations = content.match(regex);
@@ -14,7 +14,7 @@ fs.readFile('./files/day3.txt', 'utf8', (err: any, content: string) => {
   console.log('🚀 ~ fs.readFile ~ total First:', total);
 });
 //Second
-fs.readFile('./files/day3.txt', 'utf8', (err: any, content: string) => {
+fs.readFile('./data/day3.txt', 'utf8', (err: any, content: string) => {
   if (err) return;
   const regex = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g;
   const operations = content.match(regex);

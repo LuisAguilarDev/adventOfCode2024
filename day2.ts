@@ -15,7 +15,7 @@ function isSafeReport(reportData: number[]): boolean {
   }
   return true;
 }
-fs.readFile('./files/day2.txt', 'utf8', (err: any, content: string) => {
+fs.readFile('./data/day2.txt', 'utf8', (err: any, content: string) => {
   if (err) return;
   let totalSafeReports = 0;
   const reports = content.split('\n');
@@ -40,7 +40,7 @@ function isSafeWithDampener(reportData: number[]): boolean {
   return isSafe;
 }
 
-fs.readFile('./files/day2.txt', 'utf8', (err: any, content: string) => {
+fs.readFile('./data/day2.txt', 'utf8', (err: any, content: string) => {
   if (err) return;
   let totalSafeReports = 0;
   const reports = content.split('\n');
