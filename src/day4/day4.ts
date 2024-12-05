@@ -1,3 +1,4 @@
+//--- Day 4: Ceres Search ---
 //First
 export function countXMAS(rawData: string): number {
   // look for XMAS in all directions

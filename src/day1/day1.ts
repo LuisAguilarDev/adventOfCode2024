@@ -1,3 +1,4 @@
+//--- Day 1: Historian Hysteria ---
 //First;
 export function distanceBetweenList(rawData: string) {
   const list1: number[] = [];

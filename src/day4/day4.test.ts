@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { countX_MAS, countXMAS } from './day4';
 
-describe('Day 1', () => {
+describe('Day 4', () => {
   let rawData = '';
   beforeAll(async () => {
     rawData = await fs.promises

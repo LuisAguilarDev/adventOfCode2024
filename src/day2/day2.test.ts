@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { countSafeReports, countSafeReportsWithDampener } from './day2';
 
-describe('Day 1', () => {
+describe('Day 2', () => {
   let rawData = '';
   beforeAll(async () => {
     rawData = await fs.promises

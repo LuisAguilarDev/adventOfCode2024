@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { resultOfEnabledMultiplication, resultOfMultiplication } from './day3';
 
-describe('Day 1', () => {
+describe('Day 3', () => {
   let rawData = '';
   beforeAll(async () => {
     rawData = await fs.promises

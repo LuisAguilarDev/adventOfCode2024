@@ -1,3 +1,4 @@
+//--- Day 3: Mull It Over ---
 //First
 export function resultOfMultiplication(rawData: string): number {
   const regex = /mul\(\d+,\d+\)/g;

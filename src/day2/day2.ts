@@ -1,3 +1,4 @@
+//--- Day 2: Red-Nosed Reports ---
 //First;
 export function countSafeReports(rawData: string) {
   let totalSafeReports = 0;
