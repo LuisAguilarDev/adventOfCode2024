@@ -1,6 +1,6 @@
 # Advent of Code 2024 Solutions
 
-This repository contains solutions and implementations for the Advent of Code 2024, an annual programming challenge. Each solution showcases creative problem-solving and efficient coding practices using [insert your programming language(s) here, e.g., Python, JavaScript, etc.].
+This repository contains solutions and implementations for the Advent of Code 2024, an annual programming challenge. Each solution showcases creative problem-solving and efficient coding practices using Typescript.
 
 ## Features:
 
