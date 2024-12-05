@@ -1,5 +1,15 @@
-import fs from 'fs';
 //First;
+export function countSafeReports(rawData: string) {
+  let totalSafeReports = 0;
+  const reports = rawData.split('\n');
+  reports.forEach((report: string) => {
+    const reportData = report.trim().split(/\s+/).map(Number);
+    if (isSafeReport(reportData)) {
+      totalSafeReports++;
+    }
+  });
+  return totalSafeReports;
+}
 function isSafeReport(reportData: number[]): boolean {
   let isIncreasing: boolean | undefined = undefined;
   for (let i = 1; i < reportData.length; i++) {
@@ -15,19 +25,19 @@ function isSafeReport(reportData: number[]): boolean {
   }
   return true;
 }
-fs.readFile('./data/day2.txt', 'utf8', (err: any, content: string) => {
-  if (err) return;
+//Second;
+export function countSafeReportsWithDampener(rawData: string) {
   let totalSafeReports = 0;
-  const reports = content.split('\n');
+  const reports = rawData.split('\n');
   reports.forEach((report: string) => {
     const reportData = report.trim().split(/\s+/).map(Number);
-    if (isSafeReport(reportData)) {
+    if (isSafeWithDampener(reportData)) {
       totalSafeReports++;
     }
   });
-  console.log('🚀 ~ fs.readFile ~ totalSafeReports:', totalSafeReports);
-});
-//Second;
+  return totalSafeReports;
+}
+
 function isSafeWithDampener(reportData: number[]): boolean {
   if (isSafeReport(reportData)) return true;
   let isSafe = false;
@@ -39,19 +49,3 @@ function isSafeWithDampener(reportData: number[]): boolean {
   }
   return isSafe;
 }
-
-fs.readFile('./data/day2.txt', 'utf8', (err: any, content: string) => {
-  if (err) return;
-  let totalSafeReports = 0;
-  const reports = content.split('\n');
-  reports.forEach((report: string) => {
-    const reportData = report.trim().split(/\s+/).map(Number);
-    if (isSafeWithDampener(reportData)) {
-      totalSafeReports++;
-    }
-  });
-  console.log(
-    '🚀 ~ fs.readFile ~ totalSafeReportsWithDampener:',
-    totalSafeReports,
-  );
-});

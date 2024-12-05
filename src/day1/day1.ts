@@ -1,12 +1,8 @@
-import fs from 'fs';
-
-const filePath = './data/day1.txt';
 //First;
-fs.readFile(filePath, 'utf8', (err: any, content: string) => {
-  if (err) return;
+export function distanceBetweenList(rawData: string) {
   const list1: number[] = [];
   const list2: number[] = [];
-  content.split('\n').forEach((line: string) => {
+  rawData.split('\n').forEach((line: string) => {
     const [left, rigth] = line.trim().split(/\s+/).map(Number);
     list1.push(left);
     list2.push(rigth);
@@ -18,15 +14,13 @@ fs.readFile(filePath, 'utf8', (err: any, content: string) => {
     const difference = Math.abs(list1[i] - list2[i]);
     totalDifference += difference;
   }
-  console.log('🚀 ~ fs.readFile ~ totalDifference:', totalDifference);
-});
-
+  return totalDifference;
+}
 //Second;
-fs.readFile(filePath, 'utf8', (err: any, content: any) => {
-  if (err) return;
+export function similarityScore(rawData: string) {
   const list1: number[] = [];
   const list2 = new Map();
-  content.split('\n').forEach((line: string) => {
+  rawData.split('\n').forEach((line: string) => {
     const [left, rigth] = line.trim().split(/\s+/).map(Number);
     list1.push(left);
     const numberOfAppearances = list2.get(rigth);
@@ -42,5 +36,5 @@ fs.readFile(filePath, 'utf8', (err: any, content: any) => {
     const similarityScore = number * similarityMultiplier;
     totalSimilarityScore += similarityScore;
   });
-  console.log('🚀 ~ fs.readFile ~ totalSimilarityScore:', totalSimilarityScore);
-});
+  return totalSimilarityScore;
+}

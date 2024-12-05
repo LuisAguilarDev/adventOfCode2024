@@ -1,27 +1,25 @@
-import fs from 'fs';
 //First
-fs.readFile('./data/day4.txt', 'utf8', (err: any, content: string) => {
-  if (err) return;
+export function countXMAS(rawData: string): number {
   // look for XMAS in all directions
-  const word = 'XMAS';
-  const lines = content.split('\n').map((row) => {
+  const lines = rawData.split('\n').map((row) => {
     return row.trim().split('');
   });
+
   const IROWS = lines.length;
   const ICOLS = lines[0].length;
-  const stack: Array<[number, number]> = [];
+  let totalXMAS = 0;
   for (let r = 0; r < IROWS; r++) {
     for (let c = 0; c < ICOLS; c++) {
       if (lines[r][c] === 'X') {
-        stack.push([r, c]);
+        reviewXMAS([r, c]);
       }
     }
   }
-  //prettier-ignore
-  const directions = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]]
-  let totalXMAS = 0;
-  while (stack.length) {
-    const [r, c] = stack.pop()!;
+  //Count how many times XMAS appear from X
+  function reviewXMAS([r, c]: number[]) {
+    const word = 'XMAS';
+    //prettier-ignore
+    const directions = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]]
     for (const [dr, dc] of directions) {
       let isValid = true;
       for (let i = 1; i < 4; i++) {
@@ -39,14 +37,27 @@ fs.readFile('./data/day4.txt', 'utf8', (err: any, content: string) => {
       if (isValid) totalXMAS++;
     }
   }
-  console.log('🚀 ~ fs.readFile ~ totalXMAS:', totalXMAS);
-});
+  return totalXMAS;
+}
+
 //Second
-fs.readFile('./data/day4.txt', 'utf8', (err: any, content: string) => {
-  if (err) return;
-  // look for X-MAS in X
+// look for X-MAS in X
+export function countX_MAS(rawData: string): number {
   let total_X_MAS = 0;
-  function review(r: number, c: number) {
+
+  const lines = rawData.split('\n').map((row) => {
+    return row.trim().split('');
+  });
+  const IROWS = lines.length;
+  const ICOLS = lines[0].length;
+  for (let r = 0; r < IROWS; r++) {
+    for (let c = 0; c < ICOLS; c++) {
+      if (lines[r][c] === 'A') {
+        reviewX_MAS(r, c);
+      }
+    }
+  }
+  function reviewX_MAS(r: number, c: number) {
     //prettier-ignore
     const directions = [[1,1],[-1,-1],[1,-1],[-1,1]]
     const dic: any = {
@@ -65,18 +76,5 @@ fs.readFile('./data/day4.txt', 'utf8', (err: any, content: string) => {
       total_X_MAS++;
     }
   }
-  const lines = content.split('\n').map((row) => {
-    return row.trim().split('');
-  });
-  const IROWS = lines.length;
-  const ICOLS = lines[0].length;
-  for (let r = 0; r < IROWS; r++) {
-    for (let c = 0; c < ICOLS; c++) {
-      if (lines[r][c] === 'A') {
-        review(r, c);
-      }
-    }
-  }
-
-  console.log('🚀 ~ fs.readFile ~ total_X_MAS:', total_X_MAS);
-});
+  return total_X_MAS;
+}
