@@ -68,6 +68,7 @@ export function positionsVisited(
 export function isInLoop(
   labMap: Array<string[]>,
   start: [number, number],
+  obstrucion: [number, number],
 ): boolean {
   const guardMoves = new Map<guardState, [number, number]>([
     ['^', [-1, 0]],
@@ -96,16 +97,20 @@ export function isInLoop(
       const visitHash = [nr, nc].toString() + currentGuardState;
       if (visited.has(visitHash)) return true;
       if (
+        nextPosition === '#' ||
+        (nr === obstrucion[0] && nc === obstrucion[1])
+      ) {
+        const nextState = (startIndex + 1 + i) % 4;
+        currentGuardState = guardStates[nextState];
+        continue;
+      }
+      if (
         nextPosition === '.' ||
         guardStates.includes(nextPosition as guardState)
       ) {
         visited.add(visitHash);
         stack.push([nr, nc, currentGuardState]);
         break;
-      }
-      if (nextPosition === '#') {
-        const nextState = (startIndex + 1 + i) % 4;
-        currentGuardState = guardStates[nextState];
       }
     }
   }
@@ -128,12 +133,13 @@ export function countPlacesToPlaceObstruction(
   for (let r = 0; r < IROWS; r++) {
     for (let c = 0; c < ICOLS; c++) {
       const labValue = mapWithPlacesVisitedByTheGuard[r][c];
-      if (labValue === '.' || labValue === '#') continue;
-      const copiedMap = structuredClone(labMap);
-      if (!guardStates.includes(copiedMap[r][c] as guardState)) {
-        copiedMap[r][c] = '#';
-      }
-      if (isInLoop(copiedMap, start)) {
+      if (
+        labValue === '.' ||
+        labValue === '#' ||
+        guardStates.includes(labMap[r][c] as guardState)
+      )
+        continue;
+      if (isInLoop(labMap, start, [r, c])) {
         totalObstructions++;
       }
     }
