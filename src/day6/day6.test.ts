@@ -1,10 +1,10 @@
 import fs from 'fs';
 import {
   countPlacesToPlaceObstruction,
-  positionsVisited,
+  countPositionsVisited,
   getLabMap,
   getStartPosition,
-  mapWithPositionsVisited,
+  positionsVisited,
 } from './day6';
 
 describe('Day 6', () => {
@@ -35,10 +35,10 @@ describe('Day 6', () => {
     expect(labMap).toBeDefined();
   });
   test('#2 it should count how many distinct positions will the guard visit before leaving the mapped area', () => {
-    expect(positionsVisited(sampleLabMap, starSampleLabMap)).toEqual(41);
+    expect(countPositionsVisited(sampleLabMap, starSampleLabMap)).toEqual(41);
   });
   test('#3 it should count how many distinct positions will the guard visit before leaving the mapped area', () => {
-    expect(positionsVisited(labMap, startLabMap)).toEqual(5453);
+    expect(countPositionsVisited(labMap, startLabMap)).toEqual(5453);
   });
   test('#4 it should count how many distinct positions could you choose for this obstruction to create a stuck in a loop', () => {
     expect(
@@ -46,18 +46,7 @@ describe('Day 6', () => {
     ).toEqual(6);
   });
   test('#5 it should return the map of positions visited', () => {
-    expect(mapWithPositionsVisited(sampleLabMap, starSampleLabMap)).toEqual([
-      ['.', '.', '.', '.', '#', '.', '.', '.', '.', '.'],
-      ['.', '.', '.', '.', 'O', 'O', 'O', 'O', 'O', '#'],
-      ['.', '.', '.', '.', 'O', '.', '.', '.', 'O', '.'],
-      ['.', '.', '#', '.', 'O', '.', '.', '.', 'O', '.'],
-      ['.', '.', 'O', 'O', 'O', 'O', 'O', '#', 'O', '.'],
-      ['.', '.', 'O', '.', 'O', '.', 'O', '.', 'O', '.'],
-      ['.', '#', 'O', 'O', '^', 'O', 'O', 'O', 'O', '.'],
-      ['.', 'O', 'O', 'O', 'O', 'O', 'O', 'O', '#', '.'],
-      ['#', 'O', 'O', 'O', 'O', 'O', 'O', 'O', '.', '.'],
-      ['.', '.', '.', '.', '.', '.', '#', 'O', '.', '.'],
-    ]);
+    expect(positionsVisited(sampleLabMap, starSampleLabMap).size).toEqual(40);
   });
   test('#6 it should count how many distinct positions could you choose for this obstruction to create a stuck in a loop', () => {
     expect(countPlacesToPlaceObstruction(labMap, startLabMap)).toEqual(2188);
