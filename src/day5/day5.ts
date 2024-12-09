@@ -1,16 +1,13 @@
 //Day 5: Print Queue
-//First
-//X|Y
-//ORDERING RULES MAP(X,Y):MAP(number,Set<number>)   X goes before Y
-//UPDATES number[]
-//PRINTED PAGES MAP(X,Y)
-//start by identifying which updates are already in the right order.
-//Validate all X in order
-//IF "OK" SUM MIDDLE IF PAIR BOTH?
-export function getSumFromAllMiddlePagesOK(rawData: string): number {
-  let sumOfMiddlePages = 0;
+
+export function getInput(rawData: string): {
+  orderingRules: Map<number, Set<number>>;
+  updates: Array<number[]>;
+} {
   const orderingRules: Map<number, Set<number>> = new Map();
   const updates: Array<number[]> = [];
+
+  //Get the data
   for (const rawRow of rawData.split('\n')) {
     const parsedRom = rawRow.trim().split('|');
     if (parsedRom.length === 2) {
@@ -29,7 +26,26 @@ export function getSumFromAllMiddlePagesOK(rawData: string): number {
       updates.push(update);
     }
   }
+  return { orderingRules, updates };
+}
 
+//First
+//X|Y
+//ORDERING RULES MAP(X,Y):MAP(number,Set<number>)   X goes before Y
+//UPDATES number[]
+//PRINTED PAGES MAP(X,Y)
+//start by identifying which updates are already in the right order.
+//Validate all X in order
+//IF "OK" SUM MIDDLE IF PAIR BOTH?
+export function getSumFromAllMiddlePages({
+  orderingRules,
+  updates,
+}: {
+  orderingRules: Map<number, Set<number>>;
+  updates: Array<number[]>;
+}): number {
+  //chek if update report is valid and sum
+  let sumOfMiddlePages = 0;
   for (const update of updates) {
     if (isValidUpdate(update, orderingRules)) {
       const middle = Math.floor(update.length / 2);
@@ -38,6 +54,7 @@ export function getSumFromAllMiddlePagesOK(rawData: string): number {
   }
   return sumOfMiddlePages;
 }
+
 function isValidUpdate(
   update: number[],
   orderingRules: Map<number, Set<number>>,
@@ -49,70 +66,54 @@ function isValidUpdate(
       continue;
     }
     const goesBefore = orderingRules.get(pageX) ?? new Set<number>();
-    if (!isValidPage(reviewPages, goesBefore)) {
+    if (getIntersection(reviewPages, goesBefore).size !== 0) {
       return false;
     }
     reviewPages.add(pageX);
   }
   return true;
 }
-function isValidPage(
-  pagesPrinted: Set<number>,
+
+function getIntersection(
+  pagesPrinted: Set<number> | number[],
   currentPageGoesBefore: Set<number>,
-): ConstrainBoolean {
+): Set<number> {
+  const intersection = new Set<number>();
   for (const pagePrinted of pagesPrinted) {
     if (currentPageGoesBefore.has(pagePrinted)) {
-      return false;
+      intersection.add(pagePrinted);
     }
   }
-  return true;
+  return intersection;
 }
-export function getSumFromAllMiddlePagesSorting(rawData: string): number {
-  let sumOfMiddlePagesFromFixedUpdates = 0;
+
+export function getSumFromAllMiddlePages2({
+  orderingRules,
+  updates,
+}: {
+  orderingRules: Map<number, Set<number>>;
+  updates: Array<number[]>;
+}): number {
+  //Get the bad updates
   const badUpdates = [];
-  const orderingRules: Map<number, Set<number>> = new Map();
-  const updates: Array<number[]> = [];
-  for (const rawRow of rawData.split('\n')) {
-    const parsedRom = rawRow.trim().split('|');
-    if (parsedRom.length === 2) {
-      //ADD to Ordering Rules
-      const pageX = Number(parsedRom[0]);
-      const pageY = Number(parsedRom[1]);
-      const exists = orderingRules.get(pageX);
-      if (exists === undefined) {
-        orderingRules.set(pageX, new Set([pageY]));
-      } else {
-        orderingRules.set(pageX, exists.add(pageY));
-      }
-    } else {
-      if (!parsedRom[0]) continue;
-      const update = parsedRom[0].split(',').map(Number);
-      updates.push(update);
-    }
-  }
   for (const update of updates) {
     if (!isValidUpdate(update, orderingRules)) {
       badUpdates.push(update);
     }
   }
-  const fixedUpdates: Array<number[]> = [];
+
+  let sum = 0;
+
+  //SORT AND VALIDATE IF SORTING ALL
   for (const badUpdate of badUpdates) {
-    //como ordenar los updates??
     const fixedUpdate: number[] = [];
+    //como ordenar los updates??
     for (let pageX of badUpdate) {
-      if (fixedUpdate.length === 0) {
-        fixedUpdate.push(pageX);
-        continue;
-      }
       const goesBefore = orderingRules.get(pageX) ?? new Set<number>();
-      if (isValidPage(new Set(fixedUpdate), goesBefore)) {
+      if (getIntersection(fixedUpdate, goesBefore).size === 0) {
         fixedUpdate.push(pageX);
         continue;
       }
-      //SORT UNTIL CURRENT IS OK
-      // 97,13,75,29,47
-      // 97,75,29,13
-      // 47
 
       let currentIndex = fixedUpdate.length;
       while (currentIndex > 0) {
@@ -121,7 +122,8 @@ export function getSumFromAllMiddlePagesSorting(rawData: string): number {
         fixedUpdate[currentIndex] = currentPage;
         const goesBefore = orderingRules.get(pageX) ?? new Set<number>();
         if (
-          isValidPage(new Set(fixedUpdate.slice(0, currentIndex)), goesBefore)
+          getIntersection(fixedUpdate.slice(0, currentIndex), goesBefore)
+            .size === 0
         ) {
           break;
         } else {
@@ -129,11 +131,12 @@ export function getSumFromAllMiddlePagesSorting(rawData: string): number {
         }
       }
     }
-    fixedUpdates.push(fixedUpdate);
+    if (fixedUpdate.length === badUpdate.length) {
+      const middle = Math.floor(fixedUpdate.length / 2);
+      sum += fixedUpdate[middle];
+    }
   }
-  for (const update of fixedUpdates) {
-    const middle = Math.floor(update.length / 2);
-    sumOfMiddlePagesFromFixedUpdates += update[middle];
-  }
-  return sumOfMiddlePagesFromFixedUpdates;
+  return sum;
 }
+
+//Rehacer con conjuntos con las operaciones correctas (topological sort)

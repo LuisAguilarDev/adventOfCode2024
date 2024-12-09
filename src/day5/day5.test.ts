@@ -1,11 +1,19 @@
 import fs from 'fs';
 import {
-  getSumFromAllMiddlePagesOK,
-  getSumFromAllMiddlePagesSorting,
+  getInput,
+  getSumFromAllMiddlePages,
+  getSumFromAllMiddlePages2,
 } from './day5';
 
 describe('Day 5', () => {
-  let rawData = '';
+  let input: {
+    orderingRules: Map<number, Set<number>>;
+    updates: Array<number[]>;
+  };
+  let sampleInput: {
+    orderingRules: Map<number, Set<number>>;
+    updates: Array<number[]>;
+  };
   const sampleData = `47|53
                       97|13
                       97|61
@@ -35,23 +43,26 @@ describe('Day 5', () => {
                       61,13,29
                       97,13,75,29,47`;
   beforeAll(async () => {
-    rawData = await fs.promises
-      .readFile('./src/day5/day5.txt')
-      .then((bufferContent) => bufferContent.toString());
+    input = getInput(
+      await fs.promises
+        .readFile('./src/day5/day5.txt')
+        .then((bufferContent) => bufferContent.toString()),
+    );
+    sampleInput = getInput(sampleData);
   });
   test('#1 the content should exist', () => {
-    expect(rawData.length).toBeGreaterThan(0);
+    expect(input).toBeDefined();
   });
   test('#2 it should return the sum of the middle page number from all valid updates', () => {
-    expect(getSumFromAllMiddlePagesOK(sampleData)).toEqual(143);
+    expect(getSumFromAllMiddlePages(sampleInput)).toEqual(143);
   });
   test('#3 it should return the sum of the middle page number from all valid updates', () => {
-    expect(getSumFromAllMiddlePagesOK(rawData)).toEqual(6041);
+    expect(getSumFromAllMiddlePages(input)).toEqual(6041);
   });
   test('#4 it should return the sum of the middle page number from fixed updates', () => {
-    expect(getSumFromAllMiddlePagesSorting(sampleData)).toEqual(123);
+    expect(getSumFromAllMiddlePages2(sampleInput)).toEqual(123);
   });
   test('#5 it should return the sum of the middle page number from fixed updates', () => {
-    expect(getSumFromAllMiddlePagesSorting(rawData)).toEqual(4884);
+    expect(getSumFromAllMiddlePages2(input)).toEqual(4884);
   });
 });
