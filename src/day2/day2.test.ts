@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { countSafeReports, countSafeReportsWithDampener } from './day2';
+import { countSafeReports, countSafeReportsRemovingOne } from './day2';
 
 describe('Day 2', () => {
   let rawData = '';
@@ -12,6 +12,6 @@ describe('Day 2', () => {
     expect(countSafeReports(rawData)).toEqual(341);
   });
   test('#2 It should count the safe reports with Problem Dampener', () => {
-    expect(countSafeReportsWithDampener(rawData)).toEqual(404);
+    expect(countSafeReportsRemovingOne(rawData)).toEqual(404);
   });
 });
