@@ -3,24 +3,31 @@
 export function distanceBetweenList(rawData: string) {
   const list1: number[] = [];
   const list2: number[] = [];
+
+  //Get Data
   rawData.split('\n').forEach((line: string) => {
     const [left, rigth] = line.trim().split(/\s+/).map(Number);
     list1.push(left);
     list2.push(rigth);
   });
+
+  //Sort List
   list1.sort((a, b) => a - b);
   list2.sort((a, b) => a - b);
-  let totalDifference = 0;
+
+  //Get distance between each
+  let diff = 0;
   for (let i = 0; i < list1.length; i++) {
-    const difference = Math.abs(list1[i] - list2[i]);
-    totalDifference += difference;
+    diff += Math.abs(list1[i] - list2[i]);
   }
-  return totalDifference;
+  return diff;
 }
 //Second;
 export function similarityScore(rawData: string) {
   const list1: number[] = [];
   const list2 = new Map();
+
+  //Get data
   rawData.split('\n').forEach((line: string) => {
     const [left, rigth] = line.trim().split(/\s+/).map(Number);
     list1.push(left);
@@ -31,11 +38,11 @@ export function similarityScore(rawData: string) {
       list2.set(rigth, numberOfAppearances + 1);
     }
   });
-  let totalSimilarityScore = 0;
+
+  //get score
+  let score = 0;
   list1.forEach((number) => {
-    const similarityMultiplier = list2.get(number) ?? 0;
-    const similarityScore = number * similarityMultiplier;
-    totalSimilarityScore += similarityScore;
+    score += number * (list2.get(number) ?? 0);
   });
-  return totalSimilarityScore;
+  return score;
 }
