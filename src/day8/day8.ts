@@ -1,7 +1,8 @@
-//Frecuencia: minuscula, mayuscula, digito
+//--- Day 8: Resonant Collinearity ---
 export function getGrid(rawData: string): string[][] {
   return rawData.split('\n').map((row) => row.trim().split(''));
 }
+//Frecuencia: minuscula, mayuscula, digito
 //Antinodes can exist over an antenna
 //Part 1
 export function countAntinodes(grid: string[][]): number {
