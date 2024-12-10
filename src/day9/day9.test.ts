@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { getCheckSum } from './day9';
+import { getCheckSum, getCheckSum2 } from './day9';
 
 describe('Day 9', () => {
   //prettier-ignore
@@ -16,7 +16,13 @@ describe('Day 9', () => {
   test('#2 it should reeturn the filesystem checksum', () => {
     expect(getCheckSum(sampleData)).toBe(1928);
   });
-  test('#2 it should reeturn the filesystem checksum', () => {
+  test('#3 it should reeturn the filesystem checksum', () => {
     expect(getCheckSum(data)).toBe(6200294120911);
+  });
+  test('#4 it should reeturn the filesystem checksum', () => {
+    expect(getCheckSum2(sampleData)).toBe(2858);
+  });
+  test('#5 it should reeturn the filesystem checksum', () => {
+    expect(getCheckSum2(data)).toBe(6227018762750);
   });
 });
