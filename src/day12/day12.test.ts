@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { getGrid } from '../day8/day8';
-import { getFencingCost, getFencingCostOverSides } from './day12';
+import { getBorders, getFencingCost, getFencingCostOverSides } from './day12';
 describe('Day 11', () => {
   //prettier-ignore
   let grid:string[][];
@@ -11,10 +11,10 @@ describe('Day 11', () => {
         .then((bufferContent) => bufferContent.toString()),
     );
   });
-  xtest('#1 the content should exist', () => {
+  test('#1 the content should exist', () => {
     expect(grid).toBeDefined();
   });
-  xtest('#2 it should return the total cost of fencing all regions on your map', () => {
+  test('#2 it should return the total cost of fencing all regions on your map', () => {
     expect(
       getFencingCost(
         getGrid(`AAAA
@@ -24,7 +24,7 @@ describe('Day 11', () => {
       ),
     ).toBe(140);
   });
-  xtest('#3 it should return the total cost of fencing all regions on your map', () => {
+  test('#3 it should return the total cost of fencing all regions on your map', () => {
     expect(
       getFencingCost(
         getGrid(`RRRRIICCFF
@@ -40,10 +40,10 @@ describe('Day 11', () => {
       ),
     ).toBe(1930);
   });
-  xtest('#4 it should return the total cost of fencing all regions on your map', () => {
+  test('#4 it should return the total cost of fencing all regions on your map', () => {
     expect(getFencingCost(grid)).toBe(1488414);
   });
-  xtest('#5 it should the count of the stones after 75 blinks', () => {
+  test('#5 it should return the total cost of fencing all regions on your map with discount', () => {
     expect(
       getFencingCostOverSides(
         getGrid(`AAAA
@@ -53,40 +53,7 @@ describe('Day 11', () => {
       ),
     ).toBe(80);
   });
-  xtest('#6 it should the count of the stones after 75 blinks', () => {
-    expect(
-      getFencingCostOverSides(
-        getGrid(`EEEEE
-                EXXXX
-                EEEEE
-                EXXXX
-                EEEEE`),
-      ),
-    ).toBe(368);
-  });
-  xtest('#6 it should the count of the stones after 75 blinks', () => {
-    expect(
-      getFencingCostOverSides(
-        getGrid(`AAAAAA
-                 AAABBA
-                 AAABBA
-                 ABBAAA
-                 ABBAAA
-                 AAAAAA`),
-      ),
-    ).toBe(1206);
-  });
-  xtest('#6 it should the count of the stones after 75 blinks', () => {
-    expect(
-      getFencingCostOverSides(
-        getGrid(`AAAA
-                BBCD
-                BBCC
-                EEEC`),
-      ),
-    ).toBe(80);
-  });
-  xtest('#6 it should the count of the stones after 75 blinks', () => {
+  test('#6 it should return the total cost of fencing all regions on your map with discount', () => {
     expect(
       getFencingCostOverSides(
         getGrid(`EEEEE
@@ -97,20 +64,154 @@ describe('Day 11', () => {
       ),
     ).toBe(236);
   });
-  test('#3 it should return the total cost of fencing all regions on your map', () => {
+  test('#7 it should return the total cost of fencing all regions on your map with discount', () => {
+    expect(
+      getFencingCostOverSides(
+        getGrid(`AAAAAA
+                AAABBA
+                AAABBA
+                ABBAAA
+                ABBAAA
+                AAAAAA`),
+      ),
+    ).toBe(368);
+  });
+  test('#8 it should return the total cost of fencing all regions on your map with discount', () => {
+    expect(
+      getFencingCostOverSides(
+        getGrid(`AAAA
+                BBCD
+                BBCC
+                EEEC`),
+      ),
+    ).toBe(80);
+  });
+  test('#9 it should return the total cost of fencing all regions on your map with discount', () => {
+    expect(
+      getFencingCostOverSides(
+        getGrid(`EEEEE
+                EXXXX
+                EEEEE
+                EXXXX
+                EEEEE`),
+      ),
+    ).toBe(236);
+  });
+  test('#10 it should return the total cost of fencing all regions on your map with discount', () => {
     expect(
       getFencingCostOverSides(
         getGrid(`RRRRIICCFF
-                RRRRIICCCF
-                VVRRRCCFFF
-                VVRCCCJFFF
-                VVVVCJJCFE
-                VVIVCCJJEE
-                VVIIICJJEE
-                MIIIIIJJEE
-                MIIISIJEEE
-                MMMISSJEEE`),
+                 RRRRIICCCF
+                 VVRRRCCFFF
+                 VVRCCCJFFF
+                 VVVVCJJCFE
+                 VVIVCCJJEE
+                 VVIIICJJEE
+                 MIIIIIJJEE
+                 MIIISIJEEE
+                 MMMISSJEEE`),
       ),
     ).toBe(1206);
+  });
+
+  test('#11 should count the sides based on points (x,y)', () => {
+    const points: [number, number][] = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      [0, 2],
+      [1, 2],
+      [0, 3],
+      [1, 3],
+      [2, 3],
+      [2, 4],
+      [2, 2],
+      [3, 2],
+    ];
+
+    expect(getBorders(points)).toBe(10);
+  });
+
+  test('#12 should count the sides based on points (x,y)', () => {
+    const points: [number, number][] = [
+      [0, 4],
+      [1, 4],
+      [0, 5],
+      [1, 5],
+    ];
+
+    expect(getBorders(points)).toBe(4);
+  });
+
+  test('#13 should count the sides based on points (x,y)', () => {
+    const points: [number, number][] = [
+      [6, 4],
+      [7, 4],
+      [6, 3],
+      [7, 3],
+      [6, 2],
+      [7, 2],
+      [5, 2],
+      [8, 2],
+      [7, 1],
+      [8, 1],
+      [8, 3],
+      [9, 3],
+      [7, 5],
+      [8, 5],
+    ];
+
+    expect(getBorders(points)).toBe(16);
+  });
+
+  test('#14 should count the sides based on points (x,y)', () => {
+    const points: [number, number][] = [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+    ];
+
+    expect(getBorders(points)).toBe(4);
+  });
+
+  test('#15 should count the sides based on points (x,y)', () => {
+    const points: [number, number][] = [
+      [1, 1],
+      [1, 2],
+      [1, 3],
+      [1, 4],
+    ];
+
+    expect(getBorders(points)).toBe(4);
+  });
+
+  test('#16 it should return the total cost of fencing all regions on your map with discount', () => {
+    const points: [number, number][] = [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [0, 4],
+      [1, 0],
+      [2, 0],
+      [2, 1],
+      [2, 2],
+      [2, 3],
+      [2, 4],
+      [3, 0],
+      [4, 0],
+      [4, 1],
+      [4, 2],
+      [4, 3],
+      [4, 4],
+    ];
+
+    expect(getBorders(points)).toBe(12);
+  });
+
+  test('#17 it should return the total cost of fencing all regions on your map with discount', () => {
+    expect(getFencingCostOverSides(grid)).toBe(911750);
   });
 });

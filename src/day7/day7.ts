@@ -79,3 +79,4 @@ function canGetTheResultWithAditionalOperator(
   }
   return allResultsByLevel[numbers.length - 1].includes(result);
 }
+//Resolver con los tres enfoques
