@@ -162,20 +162,13 @@ export function getBordersToRight(
       if (point) {
         if (lastEdgeR === undefined) {
           lastEdgeR = cc;
-          if (!lines.length) {
-            lines.push([cr, cc]);
+          const point = lines.find(([r, c]) => {
+            return cc === c && Math.abs(cr - r) === 1;
+          });
+          if (!point) {
             borders++;
-          } else {
-            const point = lines.find(([r, c]) => {
-              return cc === c && Math.abs(cr - r) === 1;
-            });
-            if (!point) {
-              lines.push([cr, cc]);
-              borders++;
-            } else {
-              lines.push([cr, cc]);
-            }
           }
+          lines.push([cr, cc]);
         } else if (lastEdgeR + 1 === cc) {
           const point = lines.find(([r, c]) => {
             return cc === c && Math.abs(cr - r) === 1;
@@ -214,20 +207,13 @@ export function getBordersToBottom(
       if (point) {
         if (lastEdgeR === undefined) {
           lastEdgeR = cr;
-          if (!lines.length) {
-            lines.push([cr, cc]);
+          const point = lines.find(([r, c]) => {
+            return cr === r && Math.abs(cc - c) === 1;
+          });
+          if (!point) {
             borders++;
-          } else {
-            const point = lines.find(([r, c]) => {
-              return cr === r && Math.abs(cc - c) === 1;
-            });
-            if (!point) {
-              lines.push([cr, cc]);
-              borders++;
-            } else {
-              lines.push([cr, cc]);
-            }
           }
+          lines.push([cr, cc]);
         } else if (lastEdgeR + 1 === cr) {
           lastEdgeR++;
         } else {
@@ -264,27 +250,15 @@ export function getBordersToLeft(
       if (point) {
         if (lastEdgeR === undefined) {
           lastEdgeR = cc;
-          if (!lines.length) {
-            lines.push([cr, cc]);
-            borders++;
-          } else {
-            const point = lines.find(([r, c]) => {
-              return cc === c && Math.abs(cr - r) === 1;
-            });
-            if (!point) {
-              lines.push([cr, cc]);
-              borders++;
-            } else {
-              lines.push([cr, cc]);
-            }
-          }
-        } else if (lastEdgeR + 1 === cc) {
           const point = lines.find(([r, c]) => {
             return cc === c && Math.abs(cr - r) === 1;
           });
-          if (point) {
-            lastEdgeR++;
+          if (!point) {
+            borders++;
           }
+          lines.push([cr, cc]);
+        } else if (lastEdgeR - 1 === cc) {
+          lastEdgeR++;
         }
       } else {
         lastEdgeR = undefined;
@@ -308,31 +282,20 @@ export function getBordersUP(
   for (let cc = minC; cc <= maxC; cc++) {
     let lastEdgeR: number | undefined;
     for (let cr = maxR; cr >= minR; cr--) {
-      if (cr === maxR) {
-        lastEdgeR = undefined;
-      }
+      if (cr === maxR) lastEdgeR = undefined;
       const point = points.find(([r, c]) => {
         return cc === c && cr === r;
       });
-      // console.log(borders, point, cr, cc, 'lastEdgeR:', lastEdgeR);
       if (point) {
         if (lastEdgeR === undefined) {
           lastEdgeR = cr;
-          if (!lines.length) {
-            lines.push([cr, cc]);
+          const point = lines.find(([r, c]) => {
+            return cr === r && Math.abs(cc - c) === 1;
+          });
+          if (!point) {
             borders++;
-          } else {
-            const point = lines.find(([r, c]) => {
-              return cr === r && Math.abs(cc - c) === 1;
-            });
-            // console.log(cr, cc, point, lines);
-            if (!point) {
-              lines.push([cr, cc]);
-              borders++;
-            } else {
-              lines.push([cr, cc]);
-            }
           }
+          lines.push([cr, cc]);
         } else if (lastEdgeR - 1 === cr) {
           lastEdgeR--;
         } else {
