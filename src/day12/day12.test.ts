@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { getGrid } from '../day8/day8';
 import { getBorders, getFencingCost, getFencingCostOverSides } from './day12';
-describe('Day 11', () => {
+describe('Day 12', () => {
   //prettier-ignore
   let grid:string[][];
   beforeAll(async () => {
