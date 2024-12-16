@@ -23,6 +23,6 @@ describe('Day 11', () => {
     expect(countStones2(sampleData, 25)).toBe(55312);
   });
   test('#4 it should the count of the stones after 75 blinks', () => {
-    expect(countStones2(data, 75)).toBe(75);
+    expect(countStones2(data, 75)).toBe(220377651399268);
   });
 });

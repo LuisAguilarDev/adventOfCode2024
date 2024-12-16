@@ -97,8 +97,8 @@ export function getAllFewestToken(data: Point[][]): number {
 // Coeficientes de las ecuaciones
 // 94x + 34y = 8400x,5400y
 // 22x + 67y = 8400x,5400y
-// times presed a(ta) => (94*ta) * (22*tb) = target x 
-// times presed b(tb) => (34*tb) * (67*tb) = target y
+// times presed a(ta) => (94*ta) + (22*tb) = target x 
+// times presed b(tb) => (34*tb) + (67*tb) = target y
 // get minimum both ta and tb like integer otherwise wont be posible
 export function getFewestToken([a, b, p]: Point[]): number {
   // prettier-ignore

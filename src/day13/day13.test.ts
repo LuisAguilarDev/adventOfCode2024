@@ -28,16 +28,16 @@ describe('Day 13', () => {
       .readFile('./src/day13/day13.txt')
       .then((bufferContent) => getFixedInput(bufferContent.toString()));
   });
-  test('#1 it shiuld give the fewest tokens you would have to spend to win all possible prizes', () => {
+  test('#1 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
     expect(data).toBeDefined();
   });
-  test('#2 it shiuld give the fewest tokens you would have to spend to win all possible prizes', () => {
+  test('#2 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
     expect(getAllFewestToken(getInput(sampleData))).toBe(480);
   });
-  test('#3 it shiuld give the fewest tokens you would have to spend to win all possible prizes', () => {
+  test('#3 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
     expect(getAllFewestToken(data)).toBe(30973);
   });
-  test('#3 it shiuld give the fewest tokens you would have to spend to win all possible prizes', () => {
+  test('#3 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
     expect(getAllFewestToken(dataFixed)).toBe(95688837203288);
   });
 });
