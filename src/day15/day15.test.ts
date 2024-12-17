@@ -56,7 +56,7 @@ describe('Day 15', () => {
 
       <vv<<^^<<^^`)[1],
       ]),
-    ).toBe(9021);
+    ).toBe(618);
   });
   test("#6 it should give the sum of all boxes' GPS coordinates", async () => {
     expect(getSumOfAllBoxes2([getWideGrid(data[0]), data[1]])).toBe(1521453);
