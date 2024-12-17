@@ -1,3 +1,4 @@
+import fs from 'fs';
 //--- Day 15: Warehouse Woes ---
 type robotStates = '^' | '>' | 'v' | '<';
 const robotMoves = new Map<robotStates, [number, number]>([
@@ -60,23 +61,24 @@ export function getSumOfAllBoxes2([grid, moves]: [string[][], string]): number {
   // Get start @
   let [r, c] = getStart(workingGrid);
   // Get final map
-  // This modifies the original grid
   for (const move of moves) {
     const [dr, dc] = robotMoves.get(move as robotStates) ?? [0, 0];
     if (!dr && !dc) {
       throw new Error('algo salio mal');
     }
     const [nr, nc] = [r + dr, c + dc];
-    const newTile = workingGrid[nr][nc];
-    if (newTile === '#') continue;
-    if (newTile === '.') {
+    const nexTile = workingGrid[nr][nc];
+    if (nexTile === '#') {
+      continue;
+    }
+    if (nexTile === '.') {
       workingGrid[nr][nc] = '@';
       workingGrid[r][c] = '.';
       [r, c] = [nr, nc];
       continue;
     }
     // Search "." ond end of all boxesPath
-    const isBlocked = isMovementBlocked([nr, nc], [dr, dc]);
+    const isBlocked = isMovementBlocked([r, c], [dr, dc]);
     if (isBlocked) continue;
 
     workingGrid[r][c] = '.';
@@ -90,6 +92,7 @@ export function getSumOfAllBoxes2([grid, moves]: [string[][], string]): number {
       while (true) {
         const nextTile = workingGrid[r + dr * t][c + dc * t];
         workingGrid[r + dr * t][c + dc * t] = nextTemp;
+        workingGrid[r][c] = '.';
         if (nextTile === '.') break;
         nextTemp = nextTile;
         t++;
@@ -223,4 +226,19 @@ export function getWideGrid(grid: string[][]): string[][] {
     }
   }
   return wideGrid;
+}
+
+async function printGrid(grid: string[][]) {
+  await waitSeconds(0);
+  let print = '';
+  for (const row of grid) {
+    print += row.join('') + '\n';
+  }
+  fs.appendFileSync('output.txt', print, 'utf8');
+}
+
+async function waitSeconds(s: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, s * 1000);
+  });
 }

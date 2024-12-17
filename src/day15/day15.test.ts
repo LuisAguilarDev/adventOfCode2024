@@ -27,14 +27,38 @@ describe('Day 15', () => {
   test("#3 it should give the sum of all boxes' GPS coordinates", () => {
     expect(getSumOfAllBoxes(data)).toBe(1509074);
   });
-  test("#4 it should give the sum of all boxes' GPS coordinates", () => {
+  test("#4 it should give the sum of all boxes' GPS coordinates", async () => {
     const sampleGrid = getWideGrid(sampleData[0]);
-    expect(getSumOfAllBoxes2([sampleGrid, sampleData[1]])).toBe(9021);
+    expect(await getSumOfAllBoxes2([sampleGrid, sampleData[1]])).toBe(9021);
   });
-  test("#5 it should give the sum of all boxes' GPS coordinates", () => {
+  test("#5 it should give the sum of all boxes' GPS coordinates", async () => {
+    const sampleGrid = getWideGrid(
+      getGridAndMoves(`#######
+                        #...#.#
+                        #.....#
+                        #..OO@#
+                        #..O..#
+                        #.....#
+                        #######
+
+                        <vv<<^^<<^^`)[0],
+    );
     expect(
-      getSumOfAllBoxes2([getWideGrid(data[0]), data[1]]),
-    ).toBe(1433513);
+      await getSumOfAllBoxes2([
+        sampleGrid,
+        getGridAndMoves(`#######
+      #...#.#
+      #.....#
+      #..OO@#
+      #..O..#
+      #.....#
+      #######
+
+      <vv<<^^<<^^`)[1],
+      ]),
+    ).toBe(9021);
   });
+  test("#6 it should give the sum of all boxes' GPS coordinates", async () => {
+    expect(getSumOfAllBoxes2([getWideGrid(data[0]), data[1]])).toBe(1521453);
+  }, 3600000);
 });
-//prettier-ignore
