@@ -48,19 +48,20 @@ describe('Day 17', () => {
       getOuputFromComputer([117440, 0, 0], [0, 3, 5, 4, 3, 0]).output,
     ).toBe('0,3,5,4,3,0');
   });
+  //too slow
   // test('#10 it should return the proper output from the computer', () => {
   //   expect(getValueOfRegisterA([0, 3, 5, 4, 3, 0])).toBe(117440);
   // });
-  test('#12 it should return the proper output from the computer', () => {
+  test('#10 it should return the proper output from the computer', () => {
     expect(find([4, 1, 5, 5, 3, 0])).toBe(BigInt(177281));
   });
-  test('#13 it should return the proper output from the computer', () => {
+  test('#11 it should return the proper output from the computer', () => {
     expect(find([7, 4, 1, 5, 5, 3, 0])).toBe(BigInt(1418248));
   });
-  test('#14 it should return the proper output from the computer', () => {
+  test('#12 it should return the proper output from the computer', () => {
     expect(find([1, 7, 4, 1, 5, 5, 3, 0])).toBe(BigInt(11361574));
   });
-  test('#15 it should return the proper output from the computer', () => {
+  test('#13 it should return the proper output from the computer', () => {
     expect(find([2, 4, 1, 2, 7, 5, 0, 3, 1, 7, 4, 1, 5, 5, 3, 0])).toBe(
       BigInt(190615597431823),
     );
