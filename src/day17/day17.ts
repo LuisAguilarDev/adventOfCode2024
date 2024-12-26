@@ -42,19 +42,19 @@ class ChronospatialComputer {
     };
   }
   #adv(operand: number) {
-    this.#r['A'] = this.#r['A'] >> this.getLiteralOperand(operand);
+    this.#r['A'] = this.#r['A'] >> this.comboOperand(operand);
   }
   #bxl(operand: number) {
-    this.#r['B'] = this.#r['B'] ^ this.getLiteralOperand(operand);
+    this.#r['B'] = this.#r['B'] ^ operand;
   }
   #bst(operand: number) {
-    this.#r['B'] = this.getLiteralOperand(operand) % 8;
+    this.#r['B'] = this.comboOperand(operand) % 8;
   }
   #jnz(operand: number) {
     this.#instructionPointer =
       this.#r['A'] === 0
         ? this.#instructionPointer + 2
-        : this.getLiteralOperand(operand);
+        : this.comboOperand(operand);
   }
 
   #bxc(_: number) {
@@ -62,18 +62,18 @@ class ChronospatialComputer {
   }
   #out(operand: number) {
     if (!this.#output) {
-      this.#output = (this.getLiteralOperand(operand) % 8).toString();
+      this.#output = (this.comboOperand(operand) % 8).toString();
       return;
     }
-    this.#output += ',' + (this.getLiteralOperand(operand) % 8).toString();
+    this.#output += ',' + (this.comboOperand(operand) % 8).toString();
   }
   #bdv(operand: number) {
-    this.#r['B'] = this.#r['A'] >> this.getLiteralOperand(operand);
+    this.#r['B'] = this.#r['A'] >> this.comboOperand(operand);
   }
   #cdv(operand: number) {
-    this.#r['C'] = this.#r['A'] >> this.getLiteralOperand(operand);
+    this.#r['C'] = this.#r['A'] >> this.comboOperand(operand);
   }
-  getLiteralOperand(num: number): number {
+  comboOperand(num: number): number {
     if (num <= 3) {
       return num;
     }
@@ -89,6 +89,7 @@ class ChronospatialComputer {
     if (num === 7) {
       return 7;
     }
+    throw new Error('Error');
     return -1; //invalid
   }
   getOutput(): string {
@@ -129,7 +130,6 @@ export function getValueOfRegisterA(program: number[]) {
   const computer = new ChronospatialComputer();
   computer.loadProgram(program);
   for (let i = 0; i < Infinity; i++) {
-    // console.log(i);
     const r = [i * 8, 0, 0];
     computer.storeInR(r);
     computer.executeProgram();
@@ -137,58 +137,49 @@ export function getValueOfRegisterA(program: number[]) {
   }
 }
 
-function currentProgram(a: number) {
-  // 2,4 => bst(a)
-  let b = a % 8;
-  // posible values b = [0,1,2,3,4,5,6,7]
-
-  // 1,2 => bxl(2)
-  b = b ^ 2;
-  // posible values b = [2,3,0,1,6,7,4,5]
-
-  // 7,5 => cdv(b)
-  let c = a >> b;
-
-  // 0,3 => adv(3)
-  a = a >> 3;
-
-  // 1,7 => bxl(7)
-  b = b ^ 7;
-
-  // 4,1 => bxc()
-  b = b ^ c;
-
-  // 5,5 => out(B)
-  console.log(b % 8);
-  return a;
-}
-
-function find(program: number[], ans = 0): number | undefined {
+export function find(program: number[], ans = BigInt(0)): bigint | null {
   if (!program.length) return ans;
-  console.log('Current program:', program, 'Current ans:', ans);
-  for (let ib = 0; ib < 8; ib++) {
+  for (let t = BigInt(0); t < BigInt(8); t++) {
     // let b = a % 8;
     // posible values b = [0,1,2,3,4,5,6,7]
     // 2,4 => reversed bst(a)
-    let a = ans * 8 + ib;
-    // let ag = 8 * ans + ib;
-    let b = a % 8;
-    b = b ^ 2;
+    let a = (ans << BigInt(3)) + t;
+    let b = a % BigInt(8);
+    b = b ^ BigInt(2);
     let c = a >> b;
-    b = b ^ 7;
+    b = b ^ BigInt(7);
     b = b ^ c;
-    if (b % 8 === program.at(-1)) {
+    if (b % BigInt(8) === BigInt(program.at(-1)!)) {
       let sub = find(program.slice(0, -1), a);
-      if (!sub) continue;
+      if (sub == null) continue;
       return sub;
     }
   }
+  return null;
 }
 
-const program = [2, 4, 1, 2, 7, 5, 0, 3, 1, 7, 4, 1, 5, 5, 3, 0];
-// const program = [3, 1, 7, 4, 1, 5, 5, 3, 0]; //1, 7, 4, 1, 5, 5,
-// const answer = getValue(program);
-// console.log('answer', answer);
-
-console.log('ans', find(program));
-// console.log('printed', returnPrintedValue(5), 0);
+function currentProgram(a: number) {
+    // 2,4 => bst(a)
+    let b = a % 8;
+    // posible values b = [0,1,2,3,4,5,6,7]
+  
+    // 1,2 => bxl(2)
+    b = b ^ 2;
+    // posible values b = [2,3,0,1,6,7,4,5]
+  
+    // 7,5 => cdv(b)
+    let c = Math.trunc(a / 2 ** b);
+  
+    // 0,3 => adv(3)
+    a = Math.trunc(a / 8);
+  
+    // 1,7 => bxl(7)
+    b = b ^ 7;
+  
+    // 4,1 => bxc()
+    b = b ^ c;
+  
+    // 5,5 => out(B)
+    console.log('printed', (b % 8).toString(2));
+    return a;
+  }
