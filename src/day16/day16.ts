@@ -43,8 +43,8 @@ export function getLocation(
   symbol: string,
 ): [number, number] {
   const [IROWS, ICOLS] = [grid.length, grid[0].length];
-  for (let r = 0; r <= IROWS; r++) {
-    for (let c = 0; c <= ICOLS; c++) {
+  for (let r = 0; r < IROWS; r++) {
+    for (let c = 0; c < ICOLS; c++) {
       if (grid[r][c] === symbol) {
         return [r, c];
       }
@@ -136,3 +136,5 @@ export function getTilesOnBestPath(grid: string[][]): number {
   // on at least one minimal path from S to E.
   return visited.size;
 }
+
+//Dijkstra
