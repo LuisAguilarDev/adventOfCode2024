@@ -135,7 +135,6 @@ function combineMinPatterns(patternsByLevel: string[][]): string[] {
 }
 // Part 2
 export function sumOfComplexities2(codes: string[], robots = 2): number {
-  console.log('🚀 ~ sumOfComplexities2 ~ codes:', codes);
   let total = 0;
   const cache = new Map();
   for (const code of codes) {
