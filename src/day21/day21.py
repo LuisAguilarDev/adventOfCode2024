@@ -44,6 +44,7 @@ def compute_seqs(keypad):
                 break
             seqs[(x,y)] = posibilites
     return seqs
+
 def solve(string,seqs):
     options = [seqs[(x,y)] for x,y in zip("A" + string,string)]
     return ["".join(x) for x in product(*options)]
@@ -79,7 +80,7 @@ for code in codes:
 print(total)
 assert(total == 212488)
 
-# part1
+# part2
 @cache
 def compute_length(seq,depth=25):
     if depth == 1:
@@ -88,6 +89,7 @@ def compute_length(seq,depth=25):
     for x,y in zip("A"+seq,seq):
         length += min(compute_length(subseq,depth - 1) for subseq in dir_seqs[(x,y)])
     return length
+
 total2 = 0
 for code in codes:
     inputs = solve(code,num_seqs)
