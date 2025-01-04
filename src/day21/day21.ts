@@ -1,6 +1,6 @@
-//--- Day 21: Keypad Conundrum ---
 import { directions } from '../utils/utills';
 
+//--- Day 21: Keypad Conundrum ---
 //getData
 export function getData(rawString: string): string[] {
   return rawString.split('\n').map((str) => str.trim());
@@ -134,3 +134,149 @@ function combineMinPatterns(patternsByLevel: string[][]): string[] {
   return combinedPatterns;
 }
 // Part 2
+export function sumOfComplexities2(codes: string[], robots = 2): number {
+  console.log('🚀 ~ sumOfComplexities2 ~ codes:', codes);
+  let total = 0;
+  const cache = new Map();
+  for (const code of codes) {
+    const inputs = solve(code, numSeqs);
+    const results = [];
+    for (const input of inputs) {
+      const result = computeLength(input, cache, robots);
+      results.push(result);
+    }
+    const length = Math.min(...results);
+    const complexity = length * Number(code.slice(0, 3));
+    total += complexity;
+  }
+  return total;
+}
+const directionsS: [number, number, string][] = [
+  [-1, 0, '^'],
+  [1, 0, 'v'],
+  [0, -1, '<'],
+  [0, 1, '>'],
+];
+function computeSeqs(keypad: string[][]) {
+  const pos: { [key: string]: number[] } = {};
+
+  for (let r = 0; r < keypad.length; r++) {
+    for (let c = 0; c < keypad[r].length; c++) {
+      if (keypad[r][c]) {
+        pos[keypad[r][c]] = [r, c];
+      }
+    }
+  }
+  const seqs: { [key: string]: string[] } = {};
+
+  for (const x in pos) {
+    for (const y in pos) {
+      if (x === y) {
+        seqs[`${x},${y}`] = ['A'];
+        continue;
+      }
+
+      const possibilities = [];
+      const queue: [number, number, string][] = [
+        [...(pos[x] as [number, number]), ''],
+      ];
+      let optimal = Infinity;
+      while (queue.length > 0) {
+        const [r, c, moves] = queue.shift()!;
+        for (const [dr, dc, nm] of directionsS) {
+          const [nr, nc] = [r + dr, c + dc];
+          if (nr < 0 || nc < 0 || nr >= keypad.length || nc >= keypad[0].length)
+            continue;
+          if (!keypad[nr][nc]) continue;
+
+          if (keypad[nr][nc] === y) {
+            if (optimal < moves.length + 1) {
+              queue.length = 0;
+              break;
+            }
+            optimal = moves.length + 1;
+            possibilities.push(moves + nm + 'A');
+          } else {
+            queue.push([nr, nc, moves + nm]);
+          }
+        }
+      }
+
+      seqs[`${x},${y}`] = possibilities;
+    }
+  }
+
+  return seqs;
+}
+const dirSeqs = computeSeqs(sKeypad);
+const dirLengths: { [key: string]: number } = {};
+for (const [key, value] of Object.entries(dirSeqs)) {
+  dirLengths[key] = value[0].length;
+}
+const numSeqs = computeSeqs(numKeyPad);
+
+function solve(str: string, seqs: any) {
+  let path = customZip('A' + str);
+  const options = [];
+  for (const [x, y] of path) {
+    options.push(seqs[`${x},${y}`]);
+  }
+  const response = mixPatterns(options);
+  return response;
+}
+
+function customZip(str: string): [string, string][] {
+  let r: [string, string][] = [];
+  for (let i = 0; i < str.length - 1; i++) {
+    r.push([str[i], str[i + 1]]);
+  }
+  return r;
+}
+
+function mixPatterns(patterns: string[]) {
+  const result: string[] = [];
+
+  function combine(current: string[], depth: number) {
+    if (depth === patterns.length) {
+      result.push(current.join(''));
+      return;
+    }
+
+    for (const pattern of patterns[depth]) {
+      combine([...current, pattern], depth + 1);
+    }
+  }
+
+  combine([], 0);
+  return result;
+}
+
+function computeLength(
+  seq: string,
+  cache: Map<string, number>,
+  depth = 2,
+): number {
+  const cached = cache.get(seq + ',' + depth);
+  if (cached) return cached;
+  if (depth === 1) {
+    const options = customZip('A' + seq);
+    let total = 0;
+    for (const [x, y] of options) {
+      total += dirLengths[`${x},${y}`];
+    }
+    cache.set(seq + ',' + depth, total);
+    return total;
+  }
+  let length = 0;
+  const options = customZip('A' + seq);
+  for (const [x, y] of options) {
+    const subSeq = dirSeqs[`${x},${y}`];
+    let results: number[] = [];
+    for (const seq of subSeq) {
+      results.push(computeLength(seq, cache, depth - 1));
+    }
+    length += Math.min(...results);
+  }
+  cache.set(seq + ',' + depth, length);
+  return length;
+}
