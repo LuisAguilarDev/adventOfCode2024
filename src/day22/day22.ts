@@ -12,7 +12,7 @@ export function getNextSecret(num: bigint): bigint {
   num = ((num / 32n) ^ num) % 16777216n;
   num = ((num * 2048n) ^ num) % 16777216n;
   //using bigwise operations
-  // num = ((num << 6n) ^ num) % 0xffffffn;
+  // num = ((num << 6n) ^ num) & 0xffffffn;
   //   num = ((num >> 5n) ^ num) & 0xffffffn;
   //   num = ((num << 11n) ^ num) & 0xffffffn;
   return num;
@@ -67,6 +67,15 @@ export function bestSeq(secrets: number[]): number {
   for (const secret of secrets) {
     getHigherPrice(secret, sumAllSeqs);
   }
-  const max = Math.max(0, ...sumAllSeqs.values());
+  const max = Math.max(...sumAllSeqs.values());
+
+  // However, both spread (...) and apply will either fail or return the wrong result if the array has too many elements,
+  // because they try to pass the array elements as function parameters. See Using apply and built-in functions for more details. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#using_apply_and_built-in_functions
+  // The reduce solution does not have this problem.
+
+  // const max = [...sumAllSeqs.values()].reduce(
+  //   (a, b) => Math.max(a, b),
+  //   -Infinity,
+  // );
   return max;
 }
