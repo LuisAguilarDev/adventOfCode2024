@@ -1,10 +1,10 @@
 //--- Day 22: Monkey Market ---
-
-import { sumOfComplexities } from '../day21/day21';
-
 export function getData(rawString: string): number[] {
   return rawString.split('\n').map((str) => Number(str.trim()));
 }
+
+// KEYWORDS: modular arithmetic, cycle detection and sequence analysis.
+
 // Part 1
 
 export function getNextSecret(num: bigint): bigint {
@@ -58,7 +58,6 @@ export function getHigherPrice(
     }
   }
 }
-
 export function bestSeq(secrets: number[]): number {
   const sumAllSeqs: Map<string, number> = new Map();
   for (const secret of secrets) {
@@ -67,4 +66,3 @@ export function bestSeq(secrets: number[]): number {
   const max = Math.max(0, ...sumAllSeqs.values());
   return max;
 }
-// bestSeq([1, 2, 3, 2024]);
