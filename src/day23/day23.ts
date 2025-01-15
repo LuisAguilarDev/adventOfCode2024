@@ -1,5 +1,6 @@
 // --- Day 23: LAN Party ---
 
+// KEYWORDS: graph, cycle detection.
 export function getData(rawString: string): string[][] {
   return rawString.split('\n').map((str) => str.trim().split('-'));
 }
