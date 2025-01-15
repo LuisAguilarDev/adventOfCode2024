@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { fits, getData } from './day25';
 
-describe('Day 23', () => {
+describe('Day 25', () => {
   let data: [number[][], number[][], number];
 
   let sampleData = getData(`#####
