@@ -57,6 +57,6 @@ describe('Day 23', () => {
     expect(fits(...sampleData)).toBe(3);
   });
   test('#2 it should return the count of unique lock/key pairs fit together without overlapping in any column', () => {
-    expect(fits(...data)).toBe(3);
+    expect(fits(...data)).toBe(3483);
   });
 });
