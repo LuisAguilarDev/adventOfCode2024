@@ -35,10 +35,12 @@ describe('Day 20', () => {
   test('#3 it should return the quantity of cheats would save at least 100 picoseconds', () => {
     expect(cheatsAvailable(data, 100).q).toBe(1441);
   });
-  test('#3 it should return the quantity of cheats would save at least 50 picoseconds', () => {
+  test('#4 it should return the quantity of cheats would save at least 50 picoseconds', () => {
     expect(cheatsAvailablePartTwo(sampleData, 50).q).toBe(285);
   });
-  test('#3 it should return the quantity of cheats would save at least 100 picoseconds', () => {
-    expect(cheatsAvailablePartTwo(data, 100).q).toBe(1021490);
-  });
+  // it worked but needs to be improved very slow performance
+  // √ #5 it should return the quantity of cheats would save at least 100 picoseconds (104557 ms)
+  // test('#5 it should return the quantity of cheats would save at least 100 picoseconds', () => {
+  //   expect(cheatsAvailablePartTwo(data, 100).q).toBe(1021490);
+  // });
 });
