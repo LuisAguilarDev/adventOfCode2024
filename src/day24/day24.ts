@@ -26,6 +26,11 @@ export function getData(rawString: string): {
   });
   return { inputs, operations };
 }
+const operators: { [key: string]: Function } = {
+  AND: (x: number, y: number) => x & y,
+  OR: (x: number, y: number) => x | y,
+  XOR: (x: number, y: number) => x ^ y,
+};
 // Part 1
 export function getNumber({
   inputs,
@@ -38,21 +43,11 @@ export function getNumber({
     const [i1, op, i2, _, target] = operations.shift()!;
     const input1 = inputs.get(i1);
     const input2 = inputs.get(i2);
-    console.log('🚀 ~ i1:', input1, input2);
     if (input1 === undefined || input2 === undefined) {
       operations.push([i1, op, i2, _, target]);
       continue;
     }
-    console.log(op);
-    if (op === 'AND') {
-      inputs.set(target, input1 + input2 === 2 ? 1 : 0);
-    }
-    if (op === 'OR') {
-      inputs.set(target, input1 + input2 > 0 ? 1 : 0);
-    }
-    if (op === 'XOR') {
-      inputs.set(target, input1 + input2 === 1 ? 1 : 0);
-    }
+    inputs.set(target, operators[op](input1, input2));
   }
   let r: number[] = [];
   for (const [k, v] of inputs) {
@@ -64,40 +59,111 @@ export function getNumber({
   return parseInt(binaryStr, 2);
 }
 // Part 2
-export function sortWires({
-  inputs,
-  operations,
-}: {
-  inputs: Map<string, number>;
-  operations: string[][];
-}): string {
-  const replaced: string[] = [];
-  while (operations.length) {
-    const [i1, op, i2, _, target] = operations.shift()!;
-    const c1 = i1.startsWith('x');
-    const c2 = i2.startsWith('y');
-    const c3 = target.startsWith('z');
-    if (c1 || c2 || c3) {
-      if (!c1 && !c2) {
-        replaced.push(target);
-        continue;
+export function getWires(operations: string[][]) {
+  let formulas: Record<string, [string, string, string]> = {};
+  operations.forEach(([x, op, y, _, wire]) => {
+    formulas[wire] = [op, x, y];
+  });
+
+  function verifyZ(wire: string, num: number): boolean {
+    if (!(wire in formulas)) return false;
+    const [op, x, y] = formulas[wire];
+    if (op !== 'XOR') return false;
+    if (num === 0) return sortedEqual([x, y], ['x00', 'y00']);
+    return (
+      (verifyIntermediateXor(x, num) && verifyCarryBit(y, num)) ||
+      (verifyIntermediateXor(y, num) && verifyCarryBit(x, num))
+    );
+  }
+
+  function verifyIntermediateXor(wire: string, num: number): boolean {
+    if (!(wire in formulas)) return false;
+    const [op, x, y] = formulas[wire];
+    if (op !== 'XOR') return false;
+    return sortedEqual([x, y], [makeWire('x', num), makeWire('y', num)]);
+  }
+
+  function verifyCarryBit(wire: string, num: number): boolean {
+    if (!(wire in formulas)) return false;
+    const [op, x, y] = formulas[wire];
+    if (num === 1) {
+      if (op !== 'AND') return false;
+      return sortedEqual([x, y], ['x00', 'y00']);
+    }
+    if (op !== 'OR') return false;
+    return (
+      (verifyDirectCarry(x, num - 1) && verifyRecarry(y, num - 1)) ||
+      (verifyDirectCarry(y, num - 1) && verifyRecarry(x, num - 1))
+    );
+  }
+
+  function verifyDirectCarry(wire: string, num: number): boolean {
+    if (!(wire in formulas)) return false;
+    const [op, x, y] = formulas[wire];
+    if (op !== 'AND') return false;
+    return sortedEqual([x, y], [makeWire('x', num), makeWire('y', num)]);
+  }
+
+  function verifyRecarry(wire: string, num: number): boolean {
+    if (!(wire in formulas)) return false;
+    const [op, x, y] = formulas[wire];
+    if (op !== 'AND') return false;
+    return (
+      (verifyIntermediateXor(x, num) && verifyCarryBit(y, num)) ||
+      (verifyIntermediateXor(y, num) && verifyCarryBit(x, num))
+    );
+  }
+
+  function verify(num: number): boolean {
+    return verifyZ(makeWire('z', num), num);
+  }
+
+  function progressFn(): number {
+    let i = 0;
+    while (true) {
+      if (!verify(i)) break;
+      i++;
+    }
+    return i;
+  }
+
+  const swaps: string[] = [];
+
+  for (let i = 0; i < 4; i++) {
+    const baseline = progressFn();
+    let found = false;
+    for (const x in formulas) {
+      for (const y in formulas) {
+        if (x === y) continue;
+        const temp = formulas[x];
+        formulas[x] = formulas[y];
+        formulas[y] = temp;
+        if (progressFn() > baseline) {
+          swaps.push(x, y);
+          found = true;
+          break;
+        }
+        const temp2 = formulas[x];
+        formulas[x] = formulas[y];
+        formulas[y] = temp2;
       }
-      if (c1 && c2 && !c3) {
-        replaced.push(target);
-        continue;
-      }
-      if (c1 && c2) {
-        replaced.push(i1);
-      }
-      if (!c2 && c1) {
-        replaced.push(i2);
-      }
-      const ncb = Number(i1.slice(1)); //number condition base
-      const nct = Number(target.slice(1)); // number condition target
-      if (!isNaN(ncb) && !isNaN(nct) && c3 && ncb !== nct) {
-        replaced.push(target);
+      if (found) {
+        break;
       }
     }
   }
-  return replaced.sort((a, b) => a.localeCompare(b)).join(',');
+  console.log(swaps);
+  return swaps.sort((a, b) => a.localeCompare(b)).join(',');
 }
+
+function makeWire(char: string, num: number): string {
+  return char + num.toString().padStart(2, '0');
+}
+
+function sortedEqual(a: string[], b: string[]): boolean {
+  const sortedA = [...a].sort((a, b) => a.localeCompare(b));
+  const sortedB = [...b].sort((a, b) => a.localeCompare(b));
+  if (sortedA.length !== sortedB.length) return false;
+  return sortedA.every((val, idx) => val === sortedB[idx]);
+}
+
