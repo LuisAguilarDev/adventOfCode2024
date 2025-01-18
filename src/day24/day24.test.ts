@@ -97,6 +97,6 @@ describe('Day 24', () => {
     expect(getNumber(data)).toBe(60714423975686);
   });
   test('#4 it should return the names of the eight wires involved in a swap and then join those names with commas', () => {
-    expect(getWires(data)).toBe('cgh,frt,pmd,sps,tst,z05,z11,z23');
+    expect(getWires(data.operations)).toBe('cgh,frt,pmd,sps,tst,z05,z11,z23');
   });
 });
