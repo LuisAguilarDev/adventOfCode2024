@@ -31,10 +31,10 @@ describe('Day 14', () => {
       ),
     ).toBe(12);
   });
-  test('#2 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
+  test('#3 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
     expect(getSafetyFactor(103, 101, data)).toBe(211692000);
   });
-  //   test('#2 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
-  //     expect(timeToShowPicture(103, 101, data)).toBe(211692000);
-  //   });
+  test('#4 it should give the fewest tokens you would have to spend to win all possible prizes', () => {
+    expect(timeToShowPicture(103, 101, data)).toBe(6587);
+  });
 });

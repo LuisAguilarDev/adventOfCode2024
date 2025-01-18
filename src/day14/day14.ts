@@ -39,7 +39,6 @@ export function getSafetyFactor(
   const middleC = Math.floor(ICOLS / 2);
   let [q1, q2, q3, q4] = [0, 0, 0, 0];
   for (const robot of robots) {
-    console.log('🚀 ~ robot:', robot);
     const r = robot.startPosition.r;
     const c = robot.startPosition.c;
     const dr = robot.velocity.r;
@@ -72,7 +71,8 @@ export function timeToShowPicture(
   // prettier-ignore
   const directions = [[-1, -1],[-1, 0],[-1, 1],[0, -1],[0, 1],[1, -1],[1, 0],[1, 1]];
   let maxClusterSize = 0;
-  while (true) {
+  let timeShowed = 0;
+  while (time < ICOLS * IROWS) {
     const robotsPosition: Point[] = [];
     const visited = new Set<string>();
     for (const robot of robots) {
@@ -94,18 +94,11 @@ export function timeToShowPicture(
         const clusterSize = bfs(r, c, positionsSet, visited);
         if (clusterSize > maxClusterSize) {
           maxClusterSize = clusterSize;
-          console.log('🚀 ~ maxClusterSize:', maxClusterSize, time);
-          //wait a big cluster
-          //   console.log
-          //   🚀 ~ maxClusterSize: 124 6587
-
-          //     at timeToShowPicture (src/day14/day14.ts:98:19)
-
-          // console.log
-          //   🚀 ~ maxClusterSize: 229 6587
+          timeShowed = time;
         }
       }
     }
+
     time++;
   }
 
@@ -133,4 +126,5 @@ export function timeToShowPicture(
     }
     return clusterCount;
   }
+  return timeShowed;
 }
