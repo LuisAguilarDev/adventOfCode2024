@@ -1,6 +1,5 @@
 import fs from 'fs';
-import { getData, getNumber, sortWires } from './day24';
-import { get } from 'http';
+import { getData, getNumber, getWires } from './day24';
 
 describe('Day 24', () => {
   let data: {
@@ -81,26 +80,6 @@ describe('Day 24', () => {
                             hwm AND bqk -> z03
                             tgd XOR rvg -> z12
                             tnw OR pbm -> gnj`);
-
-    sampleData3 = getData(`x00: 0
-                              x01: 1
-                              x02: 0
-                              x03: 1
-                              x04: 0
-                              x05: 1
-                              y00: 0
-                              y01: 0
-                              y02: 1
-                              y03: 1
-                              y04: 0
-                              y05: 1
-                              
-                              x00 AND y00 -> z05
-                              x01 AND y01 -> z02
-                              x02 AND y02 -> z01
-                              x03 AND y03 -> z03
-                              x04 AND y04 -> z04
-                              x05 AND y05 -> z00`);
   });
 
   test('#1 should initialize data and sampleData properly', () => {
@@ -114,13 +93,10 @@ describe('Day 24', () => {
   test('#2 it should return the decimal number does it output on the wires starting with z', () => {
     expect(getNumber(sampleData2)).toBe(2024);
   });
-  xtest('#3 it should return the decimal number does it output on the wires starting with z', () => {
+  test('#3 it should return the decimal number does it output on the wires starting with z', () => {
     expect(getNumber(data)).toBe(60714423975686);
   });
   test('#4 it should return the names of the eight wires involved in a swap and then join those names with commas', () => {
-    expect(sortWires(sampleData3)).toBe('z00,z01,z02,z05');
-  });
-  test('#5 it should return the names of the eight wires involved in a swap and then join those names with commas', () => {
-    expect(sortWires(data)).toBe('z00,z01,z02,z05');
+    expect(getWires(data)).toBe('cgh,frt,pmd,sps,tst,z05,z11,z23');
   });
 });
