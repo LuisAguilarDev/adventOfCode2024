@@ -57,13 +57,13 @@ describe('Day 16', () => {
   test('#3 it should return the lowest score a Reindeer could possibly get', () => {
     expect(getLowestScore(data)).toBe(88416);
   });
-  test('#4 it should return the lowest score a Reindeer could possibly get', () => {
+  test('#4 it should return the number of tiles that the Reindeer will pass with the lowest score', () => {
     expect(getTilesOnBestPath(sampleGrid)).toBe(45);
   });
-  test('#4 it should return the lowest score a Reindeer could possibly get', () => {
+  test('#4 it should return the number of tiles that the Reindeer will pass with the lowest score', () => {
     expect(getTilesOnBestPath(sampleGrid2)).toBe(64);
   });
-  test('#5 it should return the lowest score a Reindeer could possibly get', () => {
+  test('#5 it should return the number of tiles that the Reindeer will pass with the lowest score', () => {
     expect(getTilesOnBestPath(data)).toBe(442);
   });
 });

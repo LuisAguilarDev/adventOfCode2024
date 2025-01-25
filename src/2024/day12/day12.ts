@@ -309,3 +309,5 @@ export function getBordersUP(
   // console.log(lines);
   return borders;
 }
+
+//TODO: contar las esquinas buscar los patrones internos y externos

@@ -59,6 +59,7 @@ export function getNumber({
   return parseInt(binaryStr, 2);
 }
 // Part 2
+// https://dreampuf.github.io/GraphvizOnline/ dotnotation
 export function getWires(operations: string[][]) {
   let formulas: Record<string, [string, string, string]> = {};
   operations.forEach(([x, op, y, _, wire]) => {

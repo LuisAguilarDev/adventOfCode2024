@@ -4,6 +4,8 @@
 // and always increases by a height of exactly 1 at each step. Hiking trails never include diagonal steps - only up, down, left,
 // or right (from the perspective of the map).
 
+import { directions } from '../utils/utills';
+
 // A trailhead starts on 0 and trace a route from 0 to 9.
 // Trailhead score is equal to number of paths 2 for this example:
 // ...0...
@@ -31,24 +33,24 @@ export function getScore(map: string[][]): number {
 
 function getScoreTile(map: string[][], start: [r: number, c: number]): number {
   // Trailhead score
-  //prettier-ignore
-  const directions = [[1,0],[-1,0],[0,1],[0,-1]]
   const validPath = new Set();
-  const visited = new Set(start.toString());
+  const visited = new Set();
 
   //DFS - fast access O(1) pop push
   const stack = [[...start, 0]];
   while (stack.length) {
     const [r, c, v] = stack.pop()!;
+    const hash = [r, c].toString();
+    if (map[r][c] === '9') validPath.add(hash);
+    visited.add(hash); // DFS
     for (const [dr, dc] of directions) {
       const [nr, nc] = [r + dr, c + dc];
       const tileContent = map[nr]?.[nc];
       if (!tileContent || tileContent === '.') continue;
       if (Number(tileContent) - v !== 1) continue;
       const hash = [nr, nc].toString();
-      if (tileContent === '9') validPath.add(hash);
       if (!visited.has(hash)) {
-        visited.add(hash);
+        //visited.add(hash); //BFS
         stack.push([nr, nc, v + 1]);
       }
     }
@@ -56,7 +58,7 @@ function getScoreTile(map: string[][], start: [r: number, c: number]): number {
   return validPath.size;
 }
 
-//Part 1
+//Part 2
 export function getScore2(map: string[][]): number {
   let score = 0;
   const IROWS = map.length;
@@ -70,11 +72,9 @@ export function getScore2(map: string[][]): number {
   }
   return score;
 }
-
+//TODO: se puede marcar el numero visitado con un numero de caminos para no revisitar los caminos repetidos
 function getScoreTile2(map: string[][], start: [r: number, c: number]): number {
   // Trailhead score
-  //prettier-ignore
-  const directions = [[1,0],[-1,0],[0,1],[0,-1]]
   let paths = 0;
 
   //DFS - fast access O(1) pop push

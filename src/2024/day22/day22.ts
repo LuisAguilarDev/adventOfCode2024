@@ -13,8 +13,8 @@ export function getNextSecret(num: bigint): bigint {
   num = ((num * 2048n) ^ num) % 16777216n;
   //using bigwise operations
   // num = ((num << 6n) ^ num) & 0xffffffn;
-  //   num = ((num >> 5n) ^ num) & 0xffffffn;
-  //   num = ((num << 11n) ^ num) & 0xffffffn;
+  // num = ((num >> 5n) ^ num) & 0xffffffn;
+  // num = ((num << 11n) ^ num) & 0xffffffn;
   return num;
 }
 

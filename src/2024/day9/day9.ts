@@ -123,6 +123,7 @@ export function getCheckSum(diskMap: string) {
 // The first example from above now proceeds differently:
 
 // 00...111...2...333.44.5555.6666.777.888899
+// [0,0,.,.,.,1,1,1,.,.]
 // 0099.111...2...333.44.5555.6666.777.8888..
 // 0099.1117772...333.44.5555.6666.....8888..
 // 0099.111777244.333....5555.6666.....8888..
@@ -164,6 +165,8 @@ function findFreeSpan(
 export function getCheckSum2(diskMap: string) {
   let layout = buildLayout(diskMap);
   const maxFileId = Math.round(diskMap.length / 2) - 1;
+  //TODO: mapa de espacios vacios (indice y tamaño)
+  //TODO: mapa de los indices de los archivos (indice y tamaño,id)
   for (let fid = maxFileId; fid >= 0; fid--) {
     //get the last file blocks
     const positions = [];

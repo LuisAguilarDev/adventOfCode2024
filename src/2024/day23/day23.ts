@@ -32,6 +32,7 @@ export function getConectedPCS(edges: string[][]): number {
   return r.size;
 }
 // Part 2
+// clique bron_kerbosch
 export function getLANCode(edges: string[][]): string {
   const conns: { [key: string]: Set<string> } = {};
   for (const [n1, n2] of edges) {

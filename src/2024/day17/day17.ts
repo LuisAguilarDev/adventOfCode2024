@@ -136,7 +136,8 @@ export function getValueOfRegisterA(program: number[]) {
     if (computer.getOutput() === program.toString()) return i * 8;
   }
 }
-
+// [2, 4, 1, 2, 7, 5, 0, 3, 1, 7, 4, 1, 5, 5, 3, 0]
+// [.............................................0]
 export function find(program: number[], ans = BigInt(0)): bigint | null {
   if (!program.length) return ans;
   for (let t = BigInt(0); t < BigInt(8); t++) {
@@ -146,6 +147,7 @@ export function find(program: number[], ans = BigInt(0)): bigint | null {
     let a = (ans << BigInt(3)) + t;
     let b = a % BigInt(8);
     b = b ^ BigInt(2);
+    // a = a >> 3// * 16 * 17
     let c = a >> b;
     b = b ^ BigInt(7);
     b = b ^ c;

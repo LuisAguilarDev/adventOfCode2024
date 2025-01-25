@@ -54,6 +54,8 @@ export function countAntinodes(grid: string[][]): number {
 
   return antinodes.size;
 }
+
+//TODO: hacer de la manera sencilla 
 //Part 2
 export function countAntinodesExpanded(grid: string[][]): number {
   //get locations by frecuency
